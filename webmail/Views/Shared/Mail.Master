@@ -1,0 +1,28 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title><asp:ContentPlaceHolder ID="TopContent" runat="server" /></title>
+</head>
+<body>
+    <div>
+        <asp:ContentPlaceHolder ID="LeftContent" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+
+    <div>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+
+        <div>
+        <asp:ContentPlaceHolder ID="RightContent" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+</body>
+</html>
