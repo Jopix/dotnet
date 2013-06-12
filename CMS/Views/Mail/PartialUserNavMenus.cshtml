@@ -1,0 +1,15 @@
+﻿@*<dl class="NavBox">
+    <dt class="MailTitle">我的邮箱</dt>
+    <dd class="MailAdd">@Html.ActionLink("添加邮件", "MailAdd", "Mail")</dd>
+    <dd class="MailOwn">@Html.ActionLink("我的邮件", "UserOwn", new { id = "" })</dd>
+    <dd class="MailAll">@Html.ActionLink("全部邮件", "UserAll", new { id = "" })</dd>
+    <dd class="Comment">@Html.ActionLink("评论管理", "UserComment", "User")</dd>
+</dl>*@
+
+        <ul class="nav nav-tabs nav-stacked">
+          <li>@Html.ActionLink("写邮件", "MailAdd", "Mail") </li>
+          <li>@Html.ActionLink("收件箱", "MailInbox", "Mail") </li>
+          <li>@Html.ActionLink("发件箱", "MailOutBox", "Mail") </li>
+          <li>@Html.ActionLink("草稿箱", "MailAdd", "Mail") </li>
+          <li>@Html.ActionLink("回收站", "MailAdd", "Mail") </li>
+        </ul>
