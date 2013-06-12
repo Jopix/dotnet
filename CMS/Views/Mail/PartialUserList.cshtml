@@ -1,0 +1,24 @@
+﻿@model PagerData<Ninesky.Models.Mail>
+<table class="modelitems_table">
+    <tr>
+        <th>ID</th>
+        <th>栏目</th>
+        <th>标题</th>
+        <th>发表者</th>
+        <th>发布时间</th>
+        <th>状态</th>
+        <th>点击</th>
+        <th colspan="2">操作</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MailID</td>
+            <td>[@Html.ActionLink(item.Category.Name, "MailAll", new { id = item.MailID })]</td>
+            <td>@item.SendTime</td>
+            <td>@Html.ActionLink("修改", "MailEdit", new { id = item.MailID })</td>
+            <td>@Html.ActionLink("删除", "MailDelete", new { id = item.MailID }, new { @class = "btnDel" })</td>
+        </tr>
+    }
+</table>
+@Html.PagerAjax("container", this.ViewContext.RouteData.Values, Model.Config, "pager", "pager")

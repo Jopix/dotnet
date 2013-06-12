@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Ninesky.Models.Category>
+<ul class="nav nav-list bs-docs-sidenav">
+    <li>@Html.ActionLink("写邮件", "MailAdd", "Mail") </li>
+@foreach (var item in Model)
+{
+   <li>@Html.ActionLink(item.Name, "Index", "Category", new { id = item.CategoryId }, null)</li> 
+}
+</ul>
