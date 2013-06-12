@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Ninesky.Models.Mail>
+
+@{
+    ViewBag.Title = "Mailinbox";
+    Layout = "~/Views/Shared/_User.cshtml";
+}
+
+<div class="row-fluid">
+    <div class="span2 bs-docs-sidebar">
+        @Html.Action("PartialUserNavMenus")
+    </div>
+    <div class="span8">
+        <h5>Mailinbox</h5>
+        <table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FromUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ToUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SendTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsRead)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromUser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToUser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRead)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MailID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MailID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MailID })
+        </td>
+    </tr>
+}
+</table>
+
+        </div>
+    </div>
