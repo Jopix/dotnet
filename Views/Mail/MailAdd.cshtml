@@ -60,6 +60,7 @@
                     </dl>
                 </div>
             }
+              
     </div>
 </div>
 <div class="clear"></div>
@@ -70,39 +71,7 @@
             height: "250px", //编辑器的高度为100px
     });
     });
-    var setting = {
-        view: { selectedMulti: false },
-        callback: {
-            onClick: zTreeOnClick
-        }
-    };
-    $(document).ready(function () {
-        $.post("@Url.Action("JsonUserGeneralTree", "Category")", { model: "Mail" }, function (data) {
-            var zTree = $.fn.zTree.init($("#categorytree"), setting, data);
-            zTree.expandAll(true);
-        });
-        $("#CommonModel_CategoryId_Text").click(function () {
-            $("#categorytree").show();
-        });
-    });
-    function zTreeOnClick(event, treeId, treeNode) {
-        if (treeNode.iconSkin == "canadd") {
-            $("#CommonModel_CategoryId").val(treeNode.id);
-            $("#CommonModel_CategoryId_Text").val(treeNode.name);
-            $("#categorytree").hide();
-        }
-        else {
-            alert("该栏目不能邮件");
-        }
-    };
-    $("#CommonModel_ReleaseDate").datepicker({
-    })
-    $("input[type='submit']").button();
-    
 </script>
 @section Scripts {
-    @Styles.Render("~/ZtreeCss")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Ztree")
     @Scripts.Render("~/bundles/kindeditor")
 }

@@ -11,8 +11,7 @@ namespace Ninesky.Controllers
         {
             mailRsy = new MailRepository();
         }
-        
-        #region 前台
+
         /// <summary>
         /// 邮件内容
         /// </summary>
@@ -22,9 +21,7 @@ namespace Ninesky.Controllers
         {
             return PartialView(view, mailRsy.Find(id));
         }
-        #endregion
 
-        #region 用户中心
         /// <summary>
         /// 用户默认页
         /// </summary>
@@ -295,6 +292,5 @@ namespace Ninesky.Controllers
             var _cModelPd = mailRsy.List(id, cChildren, null, page, pageSize, order);
             return PartialView(view, _cModelPd);
         }
-        #endregion
     }
 }

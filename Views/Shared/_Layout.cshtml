@@ -6,9 +6,8 @@
     <title>@ViewBag.Title - </title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
-@*    @Styles.Render("~/Css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")*@
+    @Scripts.Render("~/bundles/jquery")
     @Styles.Render("~/Content/bootstrap/css/bootstrap.min.css")
     @Styles.Render("~/Content/bootstrap/css/bootstrap-responsive.min.css")
     @Scripts.Render("~/Content/bootstrap/js/bootstrap.min.js")
@@ -16,15 +15,12 @@
 </head>
 <body>
     <div class="row-fluid">
-       <div class="span5 offset1">
+       <div class="span5 offset1" style="margin:80px;">
            <h2>CWE 站内式邮件系统</h2>
        </div>
-        <div class="span6 offset3">
+        <div class="span6 offset4">
                 @RenderBody() 
         </div>
     </div> 
-    <div class="text-center">
-         <p>版权所有 http://mzwhj.cnblogs.com</p>
-    </div>
 </body>
 </html>
