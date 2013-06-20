@@ -1,31 +1,30 @@
-﻿@*@model IEnumerable<Ninesky.Models.Mail>*@
-@model PagerData<Ninesky.Models.Mail>
+﻿@model PagerData<Ninesky.Models.Mail>
+
 @{
-    ViewBag.Title = "MailOutbox";
-    Layout = "~/Views/Shared/_User.cshtml";
+    Layout = "~/Views/Shared/_Mail.cshtml";
 }
 
 <div class="row-fluid">
     <div class="span2 bs-docs-sidebar">
         @Html.Action("PartialUserNavMenus")
     </div>
-    <div class="span8">
-
-<h5>MailOutbox</h5>
-
-<table class="table">
+    <div class="span9" id="container">
+        <ul class="breadcrumb">
+            <li class="active">发件箱</li>
+        </ul>  
+<table class="table table-hover" >
     <tr>
-        <th>收件人</th>
-        <th>标题</th>
-        <th>正文</th>
-        <th>发送时间</th>
-        <th colspan="3"> 操作</th>
+        <th style="width:10%">收件人</th>
+        <th style="width:15%">标题</th>
+        <th style="width:50%">正文</th>
+        <th style="width:18%">发送时间</th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+    <tr onclick="detail(@item.MailID)">
         <td>
-            @Html.DisplayFor(modelItem => item.ToUser)
+            @Html.DisplayFor(modelItem => item.ToUserName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Title)
@@ -37,15 +36,22 @@
             @Html.DisplayFor(modelItem => item.SendTime)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MailID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MailID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MailID })
+            @Html.ActionLink("删除", "MailDelete", new { id=item.MailID })
         </td>
     </tr>
 }
-</table>
- @Html.Pager(this.ViewContext.RouteData.Values, Model.Config, "pager", "pager")
-       
-        </div>
 
-    </div>
+</table>
+        @Html.PagerAjax("container", this.ViewContext.RouteData.Values, Model.Config, "pager", "pager")
+</div>
+</div>
+<script type="text/javascript">
+    function detail(id) {
+        window.location.href = "/Mail/MailDetail/" + id;
+    }
+</script>
+
+
+
+
+

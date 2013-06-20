@@ -12,13 +12,7 @@ namespace Ninesky.Models
     {
         [Key]
         public int UserId { get; set; }
-        /// <summary>
-        /// 用户组Id
-        /// </summary>
-        [Display(Name="用户组Id")]
-        [Required(ErrorMessage = "×")]
-        [System.Web.Mvc.Remote("Exists", "User", ErrorMessage = "用户名已存在")]
-        public int GroupId { get; set; }
+
         /// <summary>
         /// 用户名
         /// </summary>
@@ -82,10 +76,6 @@ namespace Ninesky.Models
         /// </summary>
         public DateTime? LastLoginTime { get; set; }
 
-        /// <summary>
-        /// 用户组
-        /// </summary>
-        public virtual UserGroup Group { get; set; }
     }
     /// <summary>
     /// 用户注册模型
@@ -108,20 +98,14 @@ namespace Ninesky.Models
         [Compare("Password", ErrorMessage = "×")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-        /// <summary>
-        /// 验证码
-        /// </summary>
-        [Display(Name = "验证码", Description = "请输入图片中的验证码。")]
-        [Required(ErrorMessage = "×")]
-        [StringLength(6,MinimumLength=6,ErrorMessage = "×")]
-        public string VerificationCode { get; set; }
+
         /// <summary>
         /// 密码已加密
         /// </summary>
         /// <returns></returns>
         public User GetUser()
         {
-            return new User { Address = this.Address, Email = this.Email, Gender = this.Gender, GroupId = this.GroupId, Password = Common.Text.Sha256(this.Password), PostCode = this.PostCode, QQ = this.QQ, RegTime = this.RegTime, Tel = this.Tel, UserName = this.UserName };
+            return new User { Address = this.Address, Email = this.Email, Gender = this.Gender, Password = Common.Text.Sha256(this.Password), PostCode = this.PostCode, QQ = this.QQ, RegTime = this.RegTime, Tel = this.Tel, UserName = this.UserName };
         }
     }
 
@@ -146,14 +130,6 @@ namespace Ninesky.Models
         [StringLength(20, MinimumLength = 6, ErrorMessage = "×")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        /// <summary>
-        /// 验证码
-        /// </summary>
-        [Display(Name = "验证码", Description = "请输入图片中的验证码。")]
-        [Required(ErrorMessage = "×")]
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "×")]
-        public string VerificationCode { get; set; }
-
     }
 
     /// <summary>

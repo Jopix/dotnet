@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using Ninesky.Repository;
+using System.Text.RegularExpressions;
+
 
 namespace Ninesky.Repository
 {
@@ -48,59 +50,6 @@ namespace Ninesky.Repository
             return dbContext.Mails.AsNoTracking().SingleOrDefault(a => a.MailID == Id);
         }
 
-        /// <summary>
-        /// 获取分页邮件列表
-        /// </summary>
-        /// <param name="categoryId">栏目Id</param>
-        /// <param name="cChildren">是否包含子栏目</param>
-        /// <param name="userName">用户名</param>
-        /// <param name="currentPage">当前页</param>
-        /// <param name="pageSize">每页记录数</param>
-        /// <param name="order">排序方式</param>
-        /// <returns>分页数据</returns>
-        /// 
-        public PagerData<Mail> List(int categoryId, bool cChildren, string userName, int currentPage, int pageSize, int order)
-        {
-            PagerConfig _pConfig = new PagerConfig { CurrentPage = currentPage, PageSize = pageSize };
-            var _cModels = dbContext.Mails.Include("Category").AsQueryable();
-            if (categoryId != 0)
-            {
-                if (cChildren)//包含子栏目
-                {
-                    CategoryRepository _cRsy = new CategoryRepository();
-                    IQueryable<int> _children = _cRsy.Children(categoryId, 0).Select(c => c.CategoryId);
-                    _cModels = _cModels.Where(m => _children.Contains(m.CategoryId));
-                }
-                else
-                    _cModels = _cModels.Where(m => m.CategoryId == categoryId);//不包含子栏目
-            }
-
-            _pConfig.TotalRecord = _cModels.Count();//总记录数
-            //排序
-            switch (order)
-            {
-                case 1://id降序
-                    _cModels = _cModels.OrderByDescending(m => m.MailID);
-                    break;
-                case 2://Id升序
-                    _cModels = _cModels.OrderBy(m => m.MailID);
-                    break;
-                case 3://发布日期降序
-                    _cModels = _cModels.OrderByDescending(m => m.SendTime);
-                    break;
-                case 4://发布日期升序
-                    _cModels = _cModels.OrderBy(m => m.SendTime);
-                    break;
-                default://默认id降序
-                    _cModels = _cModels.OrderByDescending(m => m.IsRead);
-                    break;
-            }
-            //分页
-            _cModels = _cModels.Skip((_pConfig.CurrentPage - 1) * _pConfig.PageSize).Take(_pConfig.PageSize);
-            PagerData<Mail> _pData = new PagerData<Mail>(_cModels, _pConfig);
-            return _pData;
-        }
-
 
         /// <summary>
         /// 获取收件箱邮件列表
@@ -117,7 +66,7 @@ namespace Ninesky.Repository
         {
             PagerConfig _pConfig = new PagerConfig { CurrentPage = currentPage, PageSize = pageSize };
             var _cModels = dbContext.Mails.AsQueryable();
-            _cModels = _cModels.Where(m => m.ToUser == userName);//不包含子栏目
+            _cModels = _cModels.Where(m => m.ToUserName == userName);//不包含子栏目
 
             _pConfig.TotalRecord = _cModels.Count();//总记录数
             //排序
@@ -139,7 +88,7 @@ namespace Ninesky.Repository
         {
             PagerConfig _pConfig = new PagerConfig { CurrentPage = currentPage, PageSize = pageSize };
             var _cModels = dbContext.Mails.AsQueryable();
-            _cModels = _cModels.Where(m => m.FromUser == userName);//不包含子栏目
+            _cModels = _cModels.Where(m => m.FromUserName == userName && m.IsSend == true);
 
             _pConfig.TotalRecord = _cModels.Count();//总记录数
             //排序
@@ -147,7 +96,81 @@ namespace Ninesky.Repository
             //分页
             _cModels = _cModels.Skip((_pConfig.CurrentPage - 1) * _pConfig.PageSize).Take(_pConfig.PageSize);
             PagerData<Mail> _pData = new PagerData<Mail>(_cModels, _pConfig);
+
+            foreach (Mail element in _pData)
+            {
+                element.Title = getShortTitle(element.Title);
+                element.Content = getShortContext(element.Content);
+            }
             return _pData;
+        }
+
+
+        /// <summary>
+        /// 草稿箱
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public PagerData<Mail> List_Draft(string userName, int currentPage, int pageSize)
+        {
+            PagerConfig _pConfig = new PagerConfig { CurrentPage = currentPage, PageSize = pageSize };
+            var _cModels = dbContext.Mails.AsQueryable();
+            _cModels = _cModels.Where(m => m.FromUserName == userName && m.IsSend == false);
+
+            _pConfig.TotalRecord = _cModels.Count();//总记录数
+            //排序
+            _cModels = _cModels.OrderByDescending(m => m.SendTime);
+            //分页
+            _cModels = _cModels.Skip((_pConfig.CurrentPage - 1) * _pConfig.PageSize).Take(_pConfig.PageSize);
+            PagerData<Mail> _pData = new PagerData<Mail>(_cModels, _pConfig);
+
+            foreach (Mail element in _pData)
+            {
+                element.Title = getShortTitle(element.Title);
+                element.Content = getShortContext(element.Content);
+            }
+            return _pData;
+        }
+
+
+
+        public string getShortContext(string context)
+        {
+            context = striphtml(context);
+  
+            int len = 60 < context.Length ? 60 : context.Length;
+           string ret = context.Substring(0, len);        
+
+            for (int i = 0; i < len; i++)
+            {
+                if (ret[i] == '\n')
+                    ret.Remove(i, 1);
+            }
+            return ret;
+        }
+
+        public string getShortTitle(string title)
+        {
+            if (title == null)
+                title = "无主题";
+            int len = 10 < title.Length ? 30 : title.Length;
+            string ret = title.Substring(0, len);
+            for (int i = 0; i < len; i++)
+            {
+                if (ret[i] == '\n')
+                    ret.Remove(i, 1);
+            }
+            return ret;
+        }
+
+        public static string striphtml(string strhtml)
+        {
+            string stroutput = strhtml;
+            Regex regex = new Regex(@"<[^>]+>|</[^>]+>");
+            stroutput = regex.Replace(stroutput, "");
+            return stroutput;
         }
     }
 }

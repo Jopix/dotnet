@@ -202,7 +202,5 @@ namespace Ninesky.Controllers
                 else return _cookie["UserName"];
                 }
         }
-
-        //以下局部视图
     }
 }

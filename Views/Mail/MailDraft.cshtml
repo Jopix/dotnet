@@ -1,0 +1,53 @@
+﻿@model PagerData<Ninesky.Models.Mail>
+
+@{
+    ViewBag.Title = "草稿箱";
+    Layout = "~/Views/Shared/_Mail.cshtml";
+}
+
+<div class="row-fluid">
+    <div class="span2 bs-docs-sidebar">
+        @Html.Action("PartialUserNavMenus")
+    </div>
+    <div class="span9">
+        <ul class="breadcrumb">
+            <li class="active">草稿箱</li>
+        </ul>  
+<table class="table table-hover" id="container" >
+    <tr>
+        <th style="width:10%">收件人</th>
+        <th style="width:15%">标题</th>
+        <th style="width:50%">正文</th>
+        <th style="width:18%">发送时间</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr onclick="edit(@item.MailID)">
+        <td>
+            @Html.DisplayFor(modelItem => item.ToUserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendTime)
+        </td>
+        <td>
+            @Html.ActionLink("删除", "MailDelete", new { id=item.MailID })
+        </td>
+    </tr>
+}
+
+</table>
+                @Html.PagerAjax("nima", this.ViewContext.RouteData.Values, Model.Config, "pager", "pager")
+        </div>
+    </div>
+<script type="text/javascript">
+    function edit(id) {
+        window.location.href = "/Mail/MailEdit/" + id;
+    }
+</script>

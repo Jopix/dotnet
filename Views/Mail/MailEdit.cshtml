@@ -2,123 +2,91 @@
 
 @{
     ViewBag.Title = "修改邮件";
-    Layout = "~/Views/Shared/_User.cshtml";
+    Layout = "~/Views/Shared/_Mail.cshtml";
 }
-
-<div class="workspace">
-    <div class="inside">
-        <div>
-            @using (Html.BeginForm())
+<div class="row-fluid">
+    <div class="span2 bs-docs-sidebar">
+        @Html.Action("PartialUserNavMenus")
+    </div>
+    <div class="span8">
+        <ul class="breadcrumb">
+            <li class="active">修改邮件</li>
+        </ul>  
+        @using (Html.BeginForm())
             {
                 @Html.ValidationSummary(true)
-                <div class="formset">
-                    <dl>
-                        <dt>修改邮件</dt>
-                        <dd>
-                            <div class="editor-field">
-                                @Html.HiddenFor(model => model.CategoryId)
-                                <input type="text" class = "combotree" id="CommonModel_CategoryId_Text" value="@Model.Category.Name" />@Html.ValidationMessageFor(model => model.CategoryId)<br />
-                                <ul id="categorytree" class="ztree comboztree"></ul>
+                <div class="form-horizontal">
+                    <dl> 
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ToUserName)
                             </div>
-                        </dd>
-                        <dd>
-                            <div class="editor-label">
-                                @Html.HiddenFor(model => model.MailID)
-                                @Html.LabelFor(model => model.Title) (必填) @Html.DisplayDescriptionFor(model => model.Title)
-                            </div>
-                            <div class="editor-field">
-                                @Html.EditorFor(model => model.Title)
-                                @Html.ValidationMessageFor(model => model.Title)
-                            </div>
-                        </dd>
-                        <dd>
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.FromUser)@Html.DisplayDescriptionFor(model => model.FromUser)
-                            </div>
-                            <div class="editor-field">
-                                @Html.EditorFor(model => model.FromUser)
-                                @Html.ValidationMessageFor(model => model.FromUser)
+                            <div class="controls">
+                                @Html.EditorFor(model => model.ToUserName)
+                                @Html.DisplayDescriptionFor(model => model.ToUserName)
+                                @Html.ValidationMessageFor(model => model.ToUserName)
                             </div>
                         </dd>
 
-                        <dd>
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.SendTime) (必填) @Html.DisplayDescriptionFor(model => model.SendTime)
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Title) 
                             </div>
-                            <div class="editor-field">
-                                @Html.TextBoxFor(model => model.SendTime, new { @class = "datepicker", type = "datetime" })
-                                @Html.ValidationMessageFor(model => model.SendTime)
-                            </div>
+                            <div class="controls">
+                                @Html.EditorFor(model => model.Title)
+                                @Html.DisplayDescriptionFor(model => model.Title)
+                                @Html.ValidationMessageFor(model => model.Title)
+                            </div>    
+                                                 
                         </dd>
-                        <dd>
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.Content) (必填) @Html.DisplayDescriptionFor(model => model.Content)
+
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Content) 
                             </div>
-                            <div class="editor-field">
-                                @Html.TextAreaFor(model => model.Content, new { @class = "content" })
+                            <div class="controls">
+                                @Html.TextAreaFor(model => model.Content, new { @class = "content"})
+                                @Html.DisplayDescriptionFor(model => model.Content)
                                 @Html.ValidationMessageFor(model => model.Content)
                             </div>
                         </dd>
-                        <dd>
-                            <div class="editor-label">
+
+
+                                            <dd class="control-group">
+                                                        <div class="control-label">
                             </div>
-                            <div class="editor-field">
-                                <input type="submit" value="确定" />
-                            </div>
+                              <div class="controls">
+
+                                @Html.EditorFor(model => model.IsSend)
+                                @Html.ValidationMessageFor(model => model.IsSend)
+                                   是否保存草稿
+                              </div>  
                         </dd>
-                        <dd>
-                            <div class="editor-label">
+                        <dd class="control-group">
+                            <div class="control-label">
                             </div>
-                            <div class="editor-field">
+                            <div class="controls">
+                                <input class ="btn btn-primary" type="submit" value=" 发 送 " />
                             </div>
                         </dd>
                     </dl>
                 </div>
             }
-        </div>
     </div>
 </div>
-<div class="left">@Html.Partial("PartialUserNavMenus")<br /></div>
 <div class="clear"></div>
 <script type="text/javascript">
     KindEditor.ready(function (K) {
-        K.create('#Content');
-    });
-    var setting = {
-        view: { selectedMulti: false },
-        callback: {
-            onClick: zTreeOnClick
-        }
-    };
-    $(document).ready(function () {
-        $.post("@Url.Action("JsonUserGeneralTree", "Category")", { model: "Mail" }, function (data) {
-            var zTree = $.fn.zTree.init($("#categorytree"), setting, data);
-            zTree.expandAll(true);
-            var node = zTree.getNodeByParam("id", $("#CommonModel_CategoryId").val(), null);
-            zTree.selectNode(node);
-        });
-        $("#CommonModel_CategoryId_Text").click(function () {
-            $("#categorytree").show();
+        K.create('#Content', {
+            width: "98%", //编辑器的宽度为90%  
+            height: "250px", //编辑器的高度为100px
+            uploadJson: '../Scripts/kindeditor/asp.net/upload_json.ashx',
+            fileManagerJson: '../Scripts/kindeditor/asp.net/file_manager_json.ashx',
+
         });
     });
-    function zTreeOnClick(event, treeId, treeNode) {
-        if (treeNode.iconSkin == "canadd") {
-            $("#CommonModel_CategoryId").val(treeNode.id);
-            $("#CommonModel_CategoryId_Text").val(treeNode.name);
-            $("#categorytree").hide();
-        }
-        else {
-            alert("该栏目不能邮件");
-        }
-    };
-    $("#CommonModel_ReleaseDate").datepicker({
-    })
-    $("input[type='submit']").button();
-    
 </script>
 @section Scripts {
-    @Styles.Render("~/ZtreeCss")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Ztree")
     @Scripts.Render("~/bundles/kindeditor")
 }

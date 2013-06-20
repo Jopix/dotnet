@@ -24,8 +24,8 @@ namespace Ninesky
             bundles.Add(new ScriptBundle("~/bundles/kindeditor").Include(
                         "~/Scripts/kindeditor/kindeditor-min.js", "~/Scripts/kindeditor/lang/zh_CN.js"));
 
-            bundles.Add(new ScriptBundle("~/Ztree").Include(
-                        "~/Scripts/Ztree/jquery.ztree.core-{version}.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/kindeditor").Include(
+            //"~/editor/kindeditor-all-min.js", "~/editor/lang/zh_CN.js"));
 
             // 使用 Modernizr 的开发版本进行开发和了解信息。然后，当你做好
             // 生产准备时，请使用 http://modernizr.com 上的生成工具来仅选择所需的测试。

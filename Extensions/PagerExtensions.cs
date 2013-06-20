@@ -39,8 +39,8 @@ namespace System.Web.Mvc
         {
             CurrentPage = 1;
             PageSize = 20;
-            RecordUnit = "条";
-            RecordName = "记录";
+            RecordUnit = "封";
+            RecordName = "邮件";
         }
     }
 
