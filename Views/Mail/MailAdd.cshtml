@@ -1,0 +1,104 @@
+﻿@model Ninesky.Models.Mail
+
+@{
+    ViewBag.Title = "添加邮件";
+    Layout = "~/Views/Shared/_Mail.cshtml";
+}
+<div class="row-fluid">
+    <div class="span2 bs-docs-sidebar">
+        @Html.Action("PartialUserNavMenus")
+    </div>
+    <div class="span8">
+        <ul class="breadcrumb">
+            <li class="active">写邮件</li>
+        </ul>  
+        @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true)
+                <div class="form-horizontal">
+                    <dl> 
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.ToUserName)
+                            </div>
+                            <div class="controls">
+                                @Html.EditorFor(model => model.ToUserName)
+                                @Html.DisplayDescriptionFor(model => model.ToUserName)
+                                @Html.ValidationMessageFor(model => model.ToUserName)
+                            </div>
+                        </dd>
+
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Title) 
+                            </div>
+                            <div class="controls">
+                                @Html.EditorFor(model => model.Title)
+                                @Html.DisplayDescriptionFor(model => model.Title)
+                                @Html.ValidationMessageFor(model => model.Title)
+                            </div>    
+                                                 
+                        </dd>
+
+                        <dd class="control-group">
+                            <div class="control-label">
+                                @Html.LabelFor(model => model.Content) 
+                            </div>
+                            <div class="controls">
+                                @Html.TextAreaFor(model => model.Content, new { @class = "content"})
+                                @Html.DisplayDescriptionFor(model => model.Content)
+                                @Html.ValidationMessageFor(model => model.Content)
+                            </div>
+                        </dd>
+                        <dd>
+                        </dd>
+                        <dd class="control-group">
+                                                        <div class="control-label">
+                            </div>
+                              <div class="controls">
+
+                                @Html.EditorFor(model => model.IsSend, new { @class = "isS"})
+                                @Html.ValidationMessageFor(model => model.IsSend)
+                                   是否保存草稿，暂不发送
+                              </div>  
+                        </dd>
+
+                        <dd class="control-group">
+
+                            <div class="control-label">
+                            </div>
+                            <div class="controls">
+                                <input id="sub" class ="btn btn-primary" type="submit" value=" 发 送 " />    
+
+                            </div> 
+                        </dd>
+                    </dl>
+                </div>
+            }
+    </div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+    KindEditor.ready(function (K) {
+        K.create('#Content', {
+            width: "98%", //编辑器的宽度为90%  
+            height: "250px", //编辑器的高度为100px
+            uploadJson: '../Scripts/kindeditor/asp.net/upload_json.ashx',
+            fileManagerJson: '../Scripts/kindeditor/asp.net/file_manager_json.ashx',
+
+    });
+    });
+    $("#isS").click(function () {
+        if ($("#sub").attr("value") == " 发 送 ") {
+            $("#sub").attr("value", " 存草稿 ");
+        }
+        else {
+            $("#sub").attr("value", " 发 送 ");
+        }
+    });
+    
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/kindeditor")
+}
